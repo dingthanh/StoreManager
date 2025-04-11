@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import DefaultComponent from './components/DefaultComponent/DefaultComponent'
 import { routes } from './routes'
 import { isJsonString } from './utils'
@@ -8,6 +8,7 @@ import * as UserService from './services/UserService'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetUser, updateUser } from './redux/slides/userSlide'
 import Loading from './components/LoadingComponent/Loading'
+
 
 function App() {
   const dispatch = useDispatch();
@@ -60,27 +61,104 @@ function App() {
     dispatch(updateUser({ ...res?.data, access_token: token, refreshToken: refreshToken}))
   }
 
+  //
+  const isLoggedIn = () => {
+    return !!localStorage.getItem('access_token');
+  };
+  
+  // Component bảo vệ
+  const ProtectedRoute = ({ element }) => {
+    return isLoggedIn() ? element : <Navigate to="/sign-in" replace />;
+  };
+
+  // return (
+  //   <div style={{height: '100vh', width: '100%'}}>
+  //     <Loading isLoading={isLoading}>
+  //       <Router>
+  //         <Routes>
+  //           {routes.map((route) => {
+  //             const Page = route.page
+  //             const Layout = route.isShowHeader ? DefaultComponent : Fragment
+  //             return (
+  //               <Route key={route.path} path={route.path} element={
+  //                 <Layout>
+  //                   <Page />
+  //                 </Layout>
+  //               } />
+  //             )
+  //           })}
+  //         </Routes>
+  //       </Router>
+  //     </Loading>
+  //   </div>
+  // )
+
+
   return (
-    <div style={{height: '100vh', width: '100%'}}>
+    <div style={{ height: '100vh', width: '100%' }}>
       <Loading isLoading={isLoading}>
         <Router>
           <Routes>
             {routes.map((route) => {
-              const Page = route.page
-              const Layout = route.isShowHeader ? DefaultComponent : Fragment
+              const Page = route.page;
+              const Layout = route.isShowHeader ? DefaultComponent : Fragment;
+              const element = (
+                <Layout>
+                  <Page />
+                </Layout>
+              );
+  
+              // Nếu route cần đăng nhập (giả sử route.protected = true)
+              const finalElement = route.protected
+                ? <ProtectedRoute element={element} />
+                : element;
+  
               return (
-                <Route key={route.path} path={route.path} element={
-                  <Layout>
-                    <Page />
-                  </Layout>
-                } />
-              )
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={finalElement}
+                />
+              );
             })}
           </Routes>
         </Router>
       </Loading>
     </div>
-  )
+  );
+
+
+//   return (
+//     <div className="app-container">
+//       <Loading isLoading={isLoading}>
+//         <Router>
+//           <Routes>
+//             {routes.map((route) => {
+//               const Page = route.page;
+//               const Layout = route.isShowHeader ? DefaultComponent : Fragment;
+//               const element = (
+//                 <Layout>
+//                   <Page />
+//                 </Layout>
+//               );
+
+//               const finalElement = route.protected
+//                 ? <ProtectedRoute element={element} />
+//                 : element;
+
+//               return (
+//                 <Route
+//                   key={route.path}
+//                   path={route.path}
+//                   element={finalElement}
+//                 />
+//               );
+//             })}
+//           </Routes>
+//         </Router>
+//       </Loading>
+//     </div>
+//   );
 }
 
 export default App

@@ -520,12 +520,29 @@ const AdminProduct = () => {
                 <InputComponent value={stateProduct.newType} onChange={handleOnchange} name="newType" />
               </Form.Item>
             )}
-            <Form.Item
+                        <Form.Item
               label="Số lượng hàng"
               name="countInStock"
-              rules={[{ required: true, message: 'Please input your count inStock!' }]}
+              rules={[
+                { required: true, message: 'Vui lòng nhập số lượng!' },
+                {
+                  validator: (_, value) => {
+                    if (!value || isNaN(value)) {
+                      return Promise.reject('Giá trị phải là một số');
+                    }
+                    if (Number(value) === 0) {
+                      return Promise.reject('Số lượng phải khác 0');
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
             >
-              <InputComponent value={stateProduct.countInStock} onChange={handleOnchange} name="countInStock" />
+              <InputComponent
+                value={stateProduct.countInStock}
+                onChange={handleOnchange}
+                name="countInStock"
+              />
             </Form.Item>
             <Form.Item
               label="Giá cả"

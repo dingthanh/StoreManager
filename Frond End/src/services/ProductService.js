@@ -1,15 +1,46 @@
 import axios from "axios"
 import { axiosJWT } from "./UserService"
 
+// export const getAllProduct = async (search, limit) => {
+//     let res = {}
+//     if (search?.length > 0) {
+//         res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?filter=name&filter=${search}&limit=${limit}`)
+//     } else {
+//         res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?limit=${limit}`)
+//     }
+//     return res.data
+// }
 export const getAllProduct = async (search, limit) => {
-    let res = {}
-    if (search?.length > 0) {
-        res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?filter=name&filter=${search}&limit=${limit}`)
-    } else {
-        res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?limit=${limit}`)
+    console.log("search", search);
+    console.log(" search,", limit,search);
+    
+    try {
+      let res = {};
+      if (search?.length > 0) {
+        res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/product/get-all?filter=name&filter=${search}&limit=${limit}`
+        );
+        console.log(" limit12,",res.data);
+        
+      } else {
+        res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/product/get-all?limit=${limit}`
+          
+        );
+        console.log(" limit23,", res);
+
+      }
+      return res.data;
+    } catch (error) {
+      console.log('❌Lỗi khi lấy danh sách sản phẩm:', error);
+      return {
+        status: 'ERR',
+        message: 'Không thể lấy danh sách sản phẩm',
+        error: error?.response?.data || error.message,
+      };
     }
-    return res.data
-}
+  };
+  
 
 export const getProductType = async (type, page, limit) => {
     if (type) {
@@ -19,7 +50,11 @@ export const getProductType = async (type, page, limit) => {
 }
 
 export const createProduct = async (data) => {
+    console.log("data",data);
+    
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/create`, data)
+    console.log("Res",res);
+    
     return res.data
 }
 

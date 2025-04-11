@@ -25,9 +25,16 @@ export const WrapperButtonMore = styled(ButtonComponent)`
     cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointers'}
 `
 
+// export const WrapperProducts = styled.div`
+//     display: flex;
+//     gap: 14px;
+//     margin-top:20px;
+//     flex-wrap: wrap;
+// `
+
 export const WrapperProducts = styled.div`
-    display: flex;
-    gap: 14px;
-    margin-top:20px;
-    flex-wrap: wrap;
-`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+`;

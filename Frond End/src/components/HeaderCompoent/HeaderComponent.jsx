@@ -31,6 +31,44 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     navigate('/sign-in')
   }
 
+  // const handleInputChange = (e) => {
+  // setSearch(e.target.value)
+
+
+const handleInputChange = (e) => {
+  const value = e.target.value;
+  setSearch(value);
+
+  if (value.trim() === '') {
+    dispatch(searchProduct('')); // clear kết quả, trả lại danh sách gốc
+  }
+};
+
+// 👉 Khi nhấn nút tìm
+const handleSearchClick = () => {
+  if (search.trim() === '') {
+    dispatch(searchProduct(''));
+  } else {
+    dispatch(searchProduct(search));
+  }
+};
+
+// 👉 Khi nhấn Enter
+const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    if (search.trim() === '') {
+      dispatch(searchProduct(''));
+    } else {
+      dispatch(searchProduct(search));
+    }
+
+    // setSearch(''); // Nếu muốn xóa input sau khi tìm → bật dòng này
+  }
+};
+
+// Các phần khác (user, order...) giữ nguyên
+
+
   const handleLogout = async () => {
     setLoading(true)
     await UserService.logoutUser()
@@ -52,7 +90,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
 
         <WrapperContentPopup onClick={() => handleClickNavigate('admin')}>Quản lí hệ thống</WrapperContentPopup>
       )}
-      <WrapperContentPopup onClick={() => handleClickNavigate(`my-order`)}>Đơn hàng của tôi</WrapperContentPopup>
+      <WrapperContentPopup onClick={() => handleClickNavigate('my-order')}>Đơn hàng của tôi</WrapperContentPopup>
       <WrapperContentPopup onClick={() => handleClickNavigate()}>Đăng xuất</WrapperContentPopup>
     </div>
   );
@@ -79,6 +117,8 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     dispatch(searchProduct(e.target.value))
   }
 
+  
+
   return (
     <div style={{  heiht: '100%', width: '100%', display: 'flex',background: '#739072', justifyContent: 'center' }}>
       <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset' , background: '#739072'}}>
@@ -88,13 +128,16 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
         {!isHiddenSearch && (
           <Col span={13}>
             <ButttonInputSearch
-              size="large"
-              bordered={false}
-              textbutton="Tìm kiếm"
-              placeholder="Tìm kiếm"
-              onChange={onSearch}
-              backgroundColorButton="#3A4D39"
-            />
+  size="large"
+  bordered={false}
+  textbutton="Tìm kiếm"
+  placeholder="Tìm kiếm"
+  onChange={handleInputChange}
+  onSearch={handleSearchClick}
+  onKeyDown={handleKeyDown}
+  backgroundColorButton="#3A4D39"
+/>
+
           </Col>
         )}
         <Col span={6} style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
@@ -128,6 +171,8 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
       >
         <UserOutlined style={{ fontSize: '20px' }} />
         {userName?.length ? userName : user?.email}
+        
+        
       </div>
     </Popover>
   ) : (

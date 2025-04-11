@@ -18,7 +18,7 @@ export const routes = [
     {
         path: '/',
         page: HomePage,
-        isShowHeader: true
+        isShowHeader: true,
     },
     {
         path: '/order',
@@ -90,3 +90,95 @@ export const routes = [
         page: PaymentResult
     }
 ]
+
+
+// export const routes = [
+//     {
+//       path: '/',
+//       page: HomePage,
+//       isShowHeader: true,
+//       protected: true
+//     },
+//     {
+//       path: '/order',
+//       page: OrderPage,
+//       isShowHeader: true,
+//       protected: true
+//     },
+//     {
+//       path: '/my-order',
+//       page: MyOrderPage,
+//       isShowHeader: true,
+//       protected: true
+//     },
+//     {
+//       path: '/details-order/:id',
+//       page: DetailsOrderPage,
+//       isShowHeader: true,
+//       protected: true
+//     },
+//     {
+//       path: '/payment',
+//       page: PaymentPage,
+//       isShowHeader: true,
+//       protected: true
+//     },
+//     {
+//       path: '/orderSuccess',
+//       page: OrderSucess,
+//       isShowHeader: true,
+//       protected: true
+//     },
+//     {
+//       path: '/products',
+//       page: ProductsPage,
+//       isShowHeader: true,
+//       protected: false
+//     },
+//     {
+//       path: '/product/:type',
+//       page: TypeProductPage,
+//       isShowHeader: true,
+//       protected: false
+//     },
+//     {
+//       path: '/sign-in',
+//       page: SignInPage,
+//       isShowHeader: false,
+//       protected: false
+//     },
+//     {
+//       path: '/sign-up',
+//       page: SignUpPage,
+//       isShowHeader: false,
+//       protected: false
+//     },
+//     {
+//       path: '/product-details/:id',
+//       page: ProductDetailsPage,
+//       isShowHeader: true,
+//       protected: false
+//     },
+//     {
+//       path: '/profile-user',
+//       page: ProfilePage,
+//       isShowHeader: true,
+//       protected: true
+//     },
+//     {
+//       path: '/system/admin',
+//       page: AdminPage,
+//       isShowHeader: false,
+//       protected: true
+//     },
+//     {
+//       path: '*',
+//       page: NotFoundPage,
+//       protected: false
+//     },
+//     {
+//       path: '/payment-result',
+//       page: PaymentResult,
+//       protected: false
+//     }
+//   ];

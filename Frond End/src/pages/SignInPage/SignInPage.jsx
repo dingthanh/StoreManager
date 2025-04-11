@@ -134,6 +134,12 @@ const SignInPage = () => {
     })
     
   }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSignIn()
+    }
+  }
   const handleOnSuccess = async (credentialResponse) => {
       try {
         const token = credentialResponse.credential;
@@ -148,8 +154,11 @@ const SignInPage = () => {
           if (decoded?.id) {
             handleGetDetailsUser(decoded?.id, result?.access_token)
           }
+          handleNavigate()
+        }else{
+          alert("Email không tồn tại!!!")
         }
-        handleNavigate()
+        
       } catch (error) {
         console.error('Đăng ký thất bại:', error);
       }
@@ -165,7 +174,7 @@ const SignInPage = () => {
         <WrapperContainerLeft>
           <h1>Xin chào</h1>
           <p>Đăng nhập tài khoản</p>
-          <InputForm style={{ marginBottom: '10px' }} placeholder="Email đăng nhập" value={email} onChange={handleOnchangeEmail} />
+          <InputForm style={{ marginBottom: '10px' }} placeholder="Email đăng nhập" value={email} onChange={handleOnchangeEmail} onKeyDown={handleKeyDown}/>
           <div style={{ position: 'relative' }}>
             <span
               onClick={() => setIsShowPassword(!isShowPassword)}
@@ -188,6 +197,7 @@ const SignInPage = () => {
               type={isShowPassword ? "text" : "password"}
               value={password}
               onChange={handleOnchangePassword}
+              onKeyDown={handleKeyDown}
             />
           </div>
           
@@ -195,7 +205,7 @@ const SignInPage = () => {
             <ButtonComponent
               disabled={!email.length || !password.length}
               onClick={handleSignIn}
-              
+              onKeyDown={handleKeyDown}
               size={40}
               styleButton={{
                 background: 'rgb(37, 130, 35)',

@@ -6,14 +6,14 @@ export const loginUser = async (data) => {
     console.log("data,",data);
     
     // const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-in`, data)
-    const res = await axios.post(`http://localhost:3001/api/user/sign-in`, data)
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-in`, data)
     .then(res => res.data)
     return res
 }
 
 export const loginUserGoogle = async (data) => {
     // const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-in`, data)
-    const res = await axios.post(`http://localhost:3001/api/user/sign-in-gg`, data)
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-in-gg`, data)
     return res.data
     
 }
@@ -37,7 +37,8 @@ export const signupUserGoogle = async (data) => {
         // Gửi token đến backend
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up-gg`, data);
         alert("dang nhap that bai1 ")
-        console.log(response.data);
+        console.log("response.data",response.data);
+        return response.data
       } catch (error) {
         console.error('Error during sign up', error);
       }

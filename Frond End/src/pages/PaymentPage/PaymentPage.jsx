@@ -20,9 +20,13 @@ import { removeAllOrderProduct } from '../../redux/slides/orderSlide';
 import { createVNPayPayment } from "../../services/PaymentService";
 
 
+
+
 const PaymentPage = () => {
+
+  const user = useSelector((state) => state.user);
+
   const order = useSelector((state) => state.order)
-  const user = useSelector((state) => state.user)
 
   const [delivery, setDelivery] = useState('fast')
   const [payment, setPayment] = useState('later_money')
@@ -95,14 +99,14 @@ const PaymentPage = () => {
 
   const handleAddOrder = () => {
 
-    //     console.log("user.access_token:", user?.access_token);
-    // console.log("order.orderItemsSlected:", order?.orderItemsSlected);
-    // console.log("user.name:", user?.name);
-    // console.log("user.address:", user?.address);
-    // console.log("user.phone:", user?.phone);
-    // console.log("user.city:", user?.city);
-    // console.log("priceMemo:", priceMemo);
-    // console.log("user.id:", user?.id);
+        console.log("user.access_token:", user?.access_token);
+    console.log("order.orderItemsSlected:", order?.orderItemsSlected);
+    console.log("user.name:", user?.name);
+    console.log("user.address:", user?.address);
+    console.log("user.phone:", user?.phone);
+    console.log("user.city:", user?.city);
+    console.log("priceMemo:", priceMemo);
+    console.log("user.id:", user?.id);
     if(user?.access_token && order?.orderItemsSlected && user?.name
       && user?.address && user?.phone && user?.city && priceMemo && user?.id) {
         // eslint-disable-next-line no-unused-expressions

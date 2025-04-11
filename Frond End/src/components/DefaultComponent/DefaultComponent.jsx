@@ -8,6 +8,7 @@ const DefaultComponent = ({children}) => {
         <HeaderComponent />
         
         {children} 
+        
    
         <FooterComponent/>
     </div>

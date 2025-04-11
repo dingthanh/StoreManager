@@ -332,7 +332,13 @@ const OrderPage = () => {
             <Form.Item
               label="Phone"
               name="phone"
-              rules={[{ required: true, message: 'Please input your  phone!' }]}
+              rules={[
+                { required: true, message: 'Please input your phone!' },
+                {
+                  pattern: /^[0-9]{9,11}$/,
+                  message: 'Số điện thoại không hợp lệ!'
+                }
+              ]}
             >
               <InputComponent value={stateUserDetails.phone} onChange={handleOnchangeDetails} name="phone" />
             </Form.Item>

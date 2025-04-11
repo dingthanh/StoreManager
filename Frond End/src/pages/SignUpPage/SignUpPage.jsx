@@ -30,6 +30,8 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const user  = useSelector((state) => state.user)
+  
 
   const handleOnchangeEmail = (value) => {
     setEmail(value)
@@ -78,6 +80,12 @@ const SignUpPage = () => {
 
   const handleSignUp = () => {
     mutation.mutate({ email, password, confirmPassword })
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSignUp()
+    }
   }
 
   // const handleOnSuccess = async(credentialResponse) =>{
@@ -141,7 +149,7 @@ const SignUpPage = () => {
         <WrapperContainerLeft>
           <h1>Xin chào</h1>
           <p>Đăng kí để tạo tài khoản</p>
-          <InputForm style={{ marginBottom: '10px' }} placeholder="Email đăng nhập" value={email} onChange={handleOnchangeEmail} />
+          <InputForm style={{ marginBottom: '10px' }} placeholder="Email đăng nhập" value={email} onChange={handleOnchangeEmail} onKeyDown={handleKeyDown}/>
           <div style={{ position: 'relative' }}>
             <span
               onClick={() => setIsShowPassword(!isShowPassword)}
@@ -159,8 +167,8 @@ const SignUpPage = () => {
                 )
               }
             </span>
-            <InputForm placeholder="Mật khẩu" style={{ marginBottom: '10px' }} type={isShowPassword ? "text" : "password"}
-              value={password} onChange={handleOnchangePassword} />
+            <InputForm placeholder="Mật khẩu" style={{ marginBottom: '10px' }} type={isShowPassword ? "text" : "password" }
+              value={password} onChange={handleOnchangePassword } onKeyDown={handleKeyDown} />
           </div>
           <div style={{ position: 'relative' }}>
             <span
@@ -180,7 +188,7 @@ const SignUpPage = () => {
               }
             </span>
             <InputForm placeholder="Nhập lại mật khẩu" type={isShowConfirmPassword ? "text" : "password"}
-              value={confirmPassword} onChange={handleOnchangeConfirmPassword}
+              value={confirmPassword} onChange={handleOnchangeConfirmPassword} onKeyDown={handleKeyDown}
             />
           </div>
           {data?.status === 'ERR' && <span style={{ color: 'red' }}>{data?.message}</span>}
@@ -202,22 +210,23 @@ const SignUpPage = () => {
             ></ButtonComponent>
           </Loading>
           <p>Bạn đã có tài khoản? <WrapperTextLight onClick={handleNavigateSignIn}> Đăng nhập</WrapperTextLight></p>
-        </WrapperContainerLeft>
-        <WrapperContainerRight>
-          {/* <Image src={imageLogo} preview={false} alt="iamge-logo" height="203px" width="203px" /> */}
-          <h4 style={{ color: 'white' }}>ĐĂNG KÝ</h4>
-        </WrapperContainerRight>
-
-       
-
-      </div>
- <div>
+          <div>
       <GoogleLogin 
       onSuccess={handleOnSuccess}
       
       onError={handleOnError}
        />
         </div>
+        </WrapperContainerLeft>
+        <WrapperContainerRight>
+          {/* <Image src={imageLogo} preview={false} alt="iamge-logo" height="203px" width="203px" /> */}
+          <h4 style={{ color: 'white' }}>ĐĂNG KÝ</h4>
+        </WrapperContainerRight>
+              
+       
+
+      </div>
+ 
     </div >
   )
 }
