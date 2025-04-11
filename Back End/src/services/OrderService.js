@@ -21,7 +21,8 @@ const createOrder = (newOrder) => {
                 if(productData) {
                     return {
                         status: 'OK',
-                        message: 'SUCCESS'
+                        message: 'SUCCESS',
+                        productData:productData
                     }
                 }
                  else {
@@ -34,6 +35,8 @@ const createOrder = (newOrder) => {
             })
             const results = await Promise.all(promises)
             const newData = results && results.filter((item) => item.id)
+            console.log("newData",newData);
+            
             if(newData.length) {
                 const arrId = []
                 newData.forEach((item) => {
@@ -63,7 +66,8 @@ const createOrder = (newOrder) => {
                     await EmailService.sendEmailCreateOrder(email,orderItems)
                     resolve({
                         status: 'OK',
-                        message: 'success'
+                        message: 'success',
+                        order: createdOrder
                     })
                 }
             }

@@ -94,14 +94,26 @@ const createUserGoogle = (newGoogleUser) => {
             email: email
         });
         // console.log(checkUser.googleUserId);
-        
+        const access_token = await genneralAccessToken({
+            id: checkUser.id,
+            isAdmin: checkUser.isAdmin
+        })
+
+        const refresh_token = await genneralRefreshToken({
+            id: checkUser.id,
+            isAdmin: checkUser.isAdmin
+        })
   
         if (checkUser !== null) {
           resolve({
             status: 'ERR',
             message: 'Người dùng đã tồn tại',
-          });
-          return;  // Ngừng hàm nếu người dùng đã có
+            id: checkUser.id,
+            access_token,
+            refresh_token,
+            name,
+            email
+          });// Ngừng hàm nếu người dùng đã có
         }
   
         // Nếu chưa có, tạo người dùng mới

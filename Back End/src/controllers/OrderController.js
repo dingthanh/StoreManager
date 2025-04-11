@@ -9,8 +9,16 @@ const createOrder = async (req, res) => {
                 message: 'The input is required'
             })
         }
+
+        
         const response = await OrderService.createOrder(req.body)
-        return res.status(200).json(response)
+        console.log('response',response);
+        
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Order created successfully',
+            order: response // đây là quan trọng
+          })
     } catch (e) {
         return res.status(404).json({
             message: e
