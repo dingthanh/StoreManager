@@ -14,7 +14,7 @@ export const createVNPayPayment = async (paymentData) => {
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/payment/create-payment`, paymentData);
 
     console.log('paymentData1',response);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Loi goi API thanh toan VNPay:", error);
     throw error;

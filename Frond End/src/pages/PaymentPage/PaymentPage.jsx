@@ -23,7 +23,6 @@ import { createVNPayPayment } from "../../services/PaymentService";
 
 
 const PaymentPage = () => {
-
   const user = useSelector((state) => state.user);
 
   const order = useSelector((state) => state.order)
@@ -99,7 +98,7 @@ const PaymentPage = () => {
 
   const handleAddOrder = () => {
 
-        console.log("user.access_token:", user?.access_token);
+    console.log("user.access_token:", user?.access_token);
     console.log("order.orderItemsSlected:", order?.orderItemsSlected);
     console.log("user.name:", user?.name);
     console.log("user.address:", user?.address);
@@ -238,49 +237,132 @@ const PaymentPage = () => {
     setPayment(e.target.value)
   }
 
+  // const handlePaymentVNPay = async () => {
+  //   try {
+  //     const response = await createVNPayPayment({
+  //       amount: priceMemo, 
+  //       orderId: "ORDER123",
+  //       userId: "USER001", 
+  //       orderInfo: "Thanh toan don hang ORDER123",
+  //       returnUrl: "http://localhost:5000/payment-result"
+  //     });
+      
+  //     if (response.status === "success" && response.paymentUrl) {
+  //       window.location.href = response.paymentUrl;
+  //     } else {
+  //       alert("Khong tao duoc link thanh toan.");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+      
+  //     // alert("Loi ket noi toi VNPay.");
+  //   }
+  // };
+  
+  console.log(" 262  ");
+
+  // const handlePaymentVNPay = async () => {
+  //   try {
+  //     // Lấy thông tin user
+  //     const user = JSON.parse(localStorage.getItem("user"));
+  //     const userId = user?.id || "GUEST";
+
+  //     console.log(user?.id);
+      
+      
+      
+  
+  //     // Tính tổng tiền từ giỏ hàng
+  //     // const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  
+  //     // Tạo orderId ngẫu nhiên
+  //     const orderId = "ORDER_" + Date.now();
+  
+  //     // Tạo mô tả đơn hàng
+  //     const orderInfo = `Thanh toán đơn hàng ${orderId} của người dùng ${userId}`;
+  
+  //     // Gửi yêu cầu tạo thanh toán
+  //     const response = await createVNPayPayment({
+  //       // amount: totalAmount,
+  //       orderId,
+  //       userId,
+  //       orderInfo,
+  //       returnUrl: "http://localhost:5000/payment-result", // FE sẽ xử lý hiển thị kết quả ở đây
+  //     });
+  
+  //     if (response.status === "success" && response.paymentUrl) {
+  //       // Chuyển hướng tới trang thanh toán VNPay
+  //       // window.location.href = response.paymentUrl;
+  //     } else {
+  //       alert("Không thể tạo yêu cầu thanh toán.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi thanh toán:", error);
+  //     alert("Có lỗi xảy ra khi tạo yêu cầu thanh toán.");
+  //   }
+  // };
+  
+
   const handlePaymentVNPay = async () => {
     try {
-      const response = await createVNPayPayment({
-        amount: 150000, 
-        orderId: "ORDER123",
-        userId: "USER001", 
-        orderInfo: "Thanh toan don hang ORDER123",
-        returnUrl: "http://localhost:5000/payment-result"
-      });
+      // 1. Gửi tạo đơn hàng lên backend
+      const res = await OrderService.createOrder(
+        {
+          orderItems: order?.orderItemsSlected,
+          fullName: user?.name,
+          address: user?.address,
+          phone: user?.phone,
+          city: user?.city,
+          paymentMethod: "vnpay",
+          itemsPrice: priceMemo,
+          shippingPrice: diliveryPriceMemo,
+          totalPrice: totalPriceMemo,
+          user: user?.id,
+          isPaid: false,
+          email: user?.email
+        },
+        user?.access_token
+      );
+      console.log(res);
       
-      if (response.status === "success" && response.paymentUrl) {
-        // window.location.href = response.paymentUrl;
+      if (res?.status === "OK") {
+        const createdOrder = res.order;
+        const orderId = createdOrder.order._id;
+        const amount = createdOrder.order.totalPrice;
+  
+        console.log("orderId: ",totalPriceMemo);
+        console.log("orderId: ",createdOrder.order._id);
+        console.log("orderId: ",user?.id);
+
+        // 2. Gọi tới server để tạo VNPay payment
+        const paymentRes = await createVNPayPayment({
+          amount: amount,
+          orderId: orderId,
+          userId: user?.id,
+          orderInfo: `Thanh toán đơn hàng ${orderId}`,
+          returnUrl: "http://localhost:5000/payment-result"
+        })
+        if (paymentRes?.data?.status === "success" && paymentRes.data?.paymentUrl) {
+          window.location.href = paymentRes.data.paymentUrl;
+        } else {
+          console.log("Không thể tạo thanh toán VNPay.");
+        }
       } else {
-        alert("Khong tao duoc link thanh toan.");
+        console.log("Không thể tạo đơn hàng.");
       }
-    } catch (err) {
-      console.log(err);
-      
-      // alert("Loi ket noi toi VNPay.");
+    } catch (error) {
+      console.log("Lỗi khi xử lý VNPay:", error);
+      message.error("Lỗi hệ thống khi thanh toán.");
     }
   };
-  
-  
 
-//   const addPaypalScript = async () => {
-//     const { data } = await PaymentService.getConfig()
-//     const script = document.createElement('script')
-//     script.type = 'text/javascript'
-//     script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
-//     script.async = true;
-//     script.onload = () => {
-//       setSdkReady(true)
-//     }
-//     document.body.appendChild(script)
-//   }
-
-//   useEffect(() => {
-//     if(!window.paypal) {
-//       addPaypalScript()
-//     }else {
-//       setSdkReady(true)
-//     }
-//   }, [])
+  // useEffect(() => {
+  //   if(!window.paypal) {
+  //     addPaypalScript()
+  //   }else {
+  //     setSdkReady(true)
+  //   }
+  // }, [])
 
   return (
     <div style={{background: '#f5f5fa', with: '100%', height: 'auto'}}>
