@@ -2,9 +2,11 @@
 const UserService = require('../services/UserService')
 const JwtService = require('../services/JwtService')
 const {jwtDecode} = require('jwt-decode');
-
-
-
+//
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GG_CLIENT_ID);
+const User = require("../models/UserModel")
+//
 const createUser = async (req, res) => {
     try {
         const { name, email, password, confirmPassword, phone } = req.body
@@ -42,36 +44,36 @@ const createUserGoogle = async (req, res) => {
       return res.status(400).json({ message: 'Token không hợp lệ' });
     }
     
-    // const decodedToken = jwtDecode(token);
-    // console.log('Thông tin người dùng từ Google:', decodedToken);
+    const decodedToken = jwtDecode(token);
+    console.log('Thông tin người dùng từ Google:', decodedToken);
     try {
-    //   // Xác thực token với Google
-    //   const ticket = await client.verifyIdToken({
-    //     idToken: token,
-    //     audience: process.env.GG_CLIENT_ID,  // Kiểm tra xem token có phải do ứng dụng của bạn phát hành
-    //   });
+    //   Xác thực token với Google
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GG_CLIENT_ID,  // Kiểm tra xem token có phải do ứng dụng của bạn phát hành
+      });
   
-    //   // Lấy thông tin người dùng từ token Google
-    //   const payload = ticket.getPayload();
-    //   const googleUserId = payload.sub;  // Google user ID
-    //   const email = payload.email;  // Email của người dùng từ Google
-    //   const name = payload.name;  // Tên người dùng từ Google
+    //   Lấy thông tin người dùng từ token Google
+      const payload = ticket.getPayload();
+      const googleUserId = payload.sub;  // Google user ID
+      const email = payload.email;  // Email của người dùng từ Google
+      const name = payload.name;  // Tên người dùng từ Google
   
-    //   // Kiểm tra xem người dùng đã có trong cơ sở dữ liệu chưa
-    //   let user = await User.findOne({ googleUserId });
+      // Kiểm tra xem người dùng đã có trong cơ sở dữ liệu chưa
+      let user = await User.findOne({ googleUserId });
   
-    //   if (!user) {
-    //     // Nếu người dùng chưa có trong cơ sở dữ liệu, tạo mới
-    //     user = new User({
-    //       googleUserId,
-    //       email,
-    //       name,
-    //     });
+      if (!user) {
+        // Nếu người dùng chưa có trong cơ sở dữ liệu, tạo mới
+        user = new User({
+          googleUserId,
+          email,
+          name,
+        });
   
-    //     await user.save();  // Lưu người dùng vào cơ sở dữ liệu
-    //   }
+        await user.save();  // Lưu người dùng vào cơ sở dữ liệu
+      }
   
-    //   // Trả lại thông tin người dùng cho frontend
+      // Trả lại thông tin người dùng cho frontend
     //   res.status(200).json({
     //     message: 'Đăng ký thành công',
     //     user: {

@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String,
             required: function () {
-              return !this.sub;  // Nếu không có googleUserId thì mới cần password
+              return !this.sub;  
             }
           },
           sub: {

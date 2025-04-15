@@ -39,7 +39,7 @@ const createUser = (newUser) => {
             });
 
             if (createdUser) {
-                await EmailService.sendEmailCreateOrder(email,orderItems)   
+                // await EmailService.sendEmailCreateOrder(email,orderItems)  
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
@@ -47,7 +47,8 @@ const createUser = (newUser) => {
                 });
             }
         } catch (e) {
-            reject(e);
+           console.log(e);
+           
         }
     });
 };
@@ -94,26 +95,13 @@ const createUserGoogle = (newGoogleUser) => {
             email: email
         });
         // console.log(checkUser.googleUserId);
-        const access_token = await genneralAccessToken({
-            id: checkUser.id,
-            isAdmin: checkUser.isAdmin
-        })
-
-        const refresh_token = await genneralRefreshToken({
-            id: checkUser.id,
-            isAdmin: checkUser.isAdmin
-        })
-  
+       
         if (checkUser !== null) {
           resolve({
             status: 'ERR',
-            message: 'Người dùng đã tồn tại',
-            id: checkUser.id,
-            access_token,
-            refresh_token,
-            name,
-            email
+            message: 'Người dùng đã tồn tại'
           });// Ngừng hàm nếu người dùng đã có
+          return
         }
   
         // Nếu chưa có, tạo người dùng mới
@@ -135,6 +123,8 @@ const createUserGoogle = (newGoogleUser) => {
           });
         }
       } catch (e) {
+        console.log(e);
+        
         reject(e);  // Nếu có lỗi, reject Promise
       }
     });
@@ -155,15 +145,19 @@ const loginUserGoogle = (newGoogleUser) => {
         const checkUser = await User.findOne({
             // sub: sub,  // Kiểm tra theo Google User ID
             email: email
+            
         });
-        // console.log(checkUser.googleUserId);
-        if (checkUser === null) {
+        console.log(email);
+        
+        
+        console.log(checkUser);
+        if (email === null) {
           resolve({
             status: 'ERR',
             message: 'The user is not defined ben login gg',
-          });
-          return;  // Ngừng hàm nếu người dùng đã có
+          }); return// Ngừng hàm nếu người dùng đã có
         }
+        
         const access_token = await genneralAccessToken({
             id: checkUser.id,
             isAdmin: checkUser.isAdmin
