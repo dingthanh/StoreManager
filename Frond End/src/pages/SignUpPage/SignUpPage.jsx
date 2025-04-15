@@ -40,9 +40,7 @@ const SignUpPage = () => {
   const mutation = useMutationHooks(
     data => UserService.signupUser(data)
   ) 
-  const mutation2 = useMutationHooks(
-    data => UserService.signupUserGoogle(data)
-  )
+  
   const handleNavigate = () => {
     navigate('/')
   }
@@ -55,7 +53,6 @@ const SignUpPage = () => {
     }
 
   const { data, isLoading, isSuccess, isError } = mutation
-  const { credentialToken } = mutation2
 
   useEffect(() => {
     if (isSuccess) {
@@ -118,19 +115,14 @@ const SignUpPage = () => {
   const handleOnSuccess = async (credentialResponse) => {
     try {
       const token = credentialResponse.credential;
-      
       // Gọi signupUserGoogle để gửi token đến backend
       const result = await signupUserGoogle({ token });
-      // console.log('Đăng ký thành công:', token);
-      localStorage.setItem('access_token', JSON.stringify(result?.access_token))
-              localStorage.setItem('refresh_token', JSON.stringify(result?.refresh_token))
-              if (result?.access_token) {
-                const decoded = jwt_decode(result?.access_token)
-                if (decoded?.id) {
-                  handleGetDetailsUser(decoded?.id, result?.access_token)
-                }
-              }
-              handleNavigate()
+      console.log('Đăng ký thành công:', result.message);
+      if(result==="Đăng ký thành công"){
+        handleNavigateSignIn()
+      }
+      
+
       
       // Bạn có thể lưu thông tin hoặc thực hiện hành động sau khi đăng ký thành công
     } catch (error) {

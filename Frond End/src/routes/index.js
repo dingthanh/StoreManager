@@ -133,13 +133,13 @@ export const routes = [
       path: '/products',
       page: ProductsPage,
       isShowHeader: true,
-      protected: false
+      protected: true
     },
     {
       path: '/product/:type',
       page: TypeProductPage,
       isShowHeader: true,
-      protected: false
+      protected: true
     },
     {
       path: '/sign-in',
@@ -157,7 +157,7 @@ export const routes = [
       path: '/product-details/:id',
       page: ProductDetailsPage,
       isShowHeader: true,
-      protected: false
+      protected: true
     },
     {
       path: '/profile-user',

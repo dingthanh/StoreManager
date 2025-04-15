@@ -94,9 +94,15 @@ export const refreshToken = async (refreshToken) => {
 }
 
 export const logoutUser = async () => {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/log-out`)
-    localStorage.removeItem('access_token');
-    return res.data
+    try {
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/log-out`)
+        localStorage.clear();
+        localStorage.removeItem('persist:root');
+        return res.data
+    } catch (error) {
+        console.error("Logout failed:", error);
+        throw error;
+    }
 }
 
 export const updateUser = async (id, data, access_token) => {
