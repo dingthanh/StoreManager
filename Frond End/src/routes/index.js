@@ -97,7 +97,7 @@ export const routes = [
       path: '/',
       page: HomePage,
       isShowHeader: true,
-      protected: false
+      protected: true
     },
     {
       path: '/order',
@@ -174,7 +174,7 @@ export const routes = [
     {
       path: '*',
       page: NotFoundPage,
-      protected: false
+      protected: true
     },
     {
       path: '/payment-result',
