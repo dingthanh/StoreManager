@@ -37,13 +37,25 @@ const createUser = (newUser) => {
                 phone,
                 username
             });
+            const access_token = await genneralAccessToken({
+                id: createdUser.id,
+                isAdmin: createdUser.isAdmin
+              });
+              
+              const refresh_token = await genneralRefreshToken({
+                id: createdUser.id,
+                isAdmin: createdUser.isAdmin
+              });
 
             if (createdUser) {
                 // await EmailService.sendEmailCreateOrder(email,orderItems)  
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
-                    data: createdUser
+                    data: createdUser,
+                    id: createdUser.id,
+                    access_token,
+                    refresh_token,
                 });
             }
         } catch (e) {
@@ -97,31 +109,52 @@ const createUserGoogle = (newGoogleUser) => {
         // console.log(checkUser.googleUserId);
        
         if (checkUser !== null) {
-          resolve({
-            status: 'ERR',
-            message: 'Người dùng đã tồn tại'
-          });// Ngừng hàm nếu người dùng đã có
-          return
-        }
-  
-        // Nếu chưa có, tạo người dùng mới
-        const createdUser = await User.create({
-          sub,  // Lưu Google User ID
-          email,          // Lưu email người dùng
-          name        // Lưu tên người dùng
-                   // Lưu số điện thoại (nếu có)
-        });
-        console.log(createdUser.email);
-        
-  
-        // Kiểm tra nếu người dùng đã được tạo thành công
-        if (createdUser) {
+            const access_token = await genneralAccessToken({
+              id: checkUser.id,
+              isAdmin: checkUser.isAdmin
+            });
+          
+            const refresh_token = await genneralRefreshToken({
+              id: checkUser.id,
+              isAdmin: checkUser.isAdmin
+            });
+          
+            resolve({
+              status: 'OK',
+              message: 'Đăng nhập thành công',
+              data: checkUser,
+              id: checkUser.id,
+              access_token,
+              refresh_token,
+              name: checkUser.name,
+              email: checkUser.email
+            });
+            return;
+          }
+          
+          // Nếu chưa có, tạo người dùng mới
+          const createdUser = await User.create({ sub, email, name });
+          
+          const access_token = await genneralAccessToken({
+            id: createdUser.id,
+            isAdmin: createdUser.isAdmin
+          });
+          
+          const refresh_token = await genneralRefreshToken({
+            id: createdUser.id,
+            isAdmin: createdUser.isAdmin
+          });
+          
           resolve({
             status: 'OK',
             message: 'Đăng ký thành công',
-            data: createdUser,  // Trả về thông tin người dùng
+            data: createdUser,
+            id: createdUser.id,
+            access_token,
+            refresh_token,
+            name,
+            email
           });
-        }
       } catch (e) {
         console.log(e);
         
@@ -155,7 +188,7 @@ const loginUserGoogle = (newGoogleUser) => {
           resolve({
             status: 'ERR',
             message: 'The user is not defined ben login gg',
-          }); return// Ngừng hàm nếu người dùng đã có
+          });// Ngừng hàm nếu người dùng đã có
         }
         
         const access_token = await genneralAccessToken({

@@ -15,6 +15,7 @@ import { useEffect } from 'react'
 import { GoogleLogin } from '@react-oauth/google'
 // signup.jsx
 import { signupUserGoogle } from '../../services/UserService';
+import { signupUser } from '../../services/UserService';
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from '../../redux/slides/userSlide'
 import jwt_decode from "jwt-decode";
@@ -57,7 +58,16 @@ const SignUpPage = () => {
   useEffect(() => {
     if (isSuccess) {
       message.success()
-      handleNavigateSignIn()
+      if (data?.status === 'OK') {
+              // ✅ Đăng nhập thành công
+              localStorage.setItem('access_token', JSON.stringify(data.access_token));
+              localStorage.setItem('refresh_token', JSON.stringify(data.refresh_token));
+              const decoded = jwt_decode(data.access_token);
+              if (decoded?.id) {
+                handleGetDetailsUser(decoded.id, data.access_token);
+              }
+              handleNavigate()
+            } 
     } else if (isError) {
       message.error()
     }
@@ -75,9 +85,34 @@ const SignUpPage = () => {
     navigate('/sign-in')
   }
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     mutation.mutate({ email, password, confirmPassword })
+    
   }
+//   const handleSignUp = async () => {
+//   try {
+//         const result = await signupUser();
+//         console.log('Đăng ký thành công:', result.message);
+//         if(result.status === "OK"){
+//           localStorage.setItem('access_token', JSON.stringify(result?.access_token))
+//           localStorage.setItem('refresh_token', JSON.stringify(result?.refresh_token))
+//           if (result?.access_token) {
+//             const decoded = jwt_decode(result?.access_token)
+//             if (decoded?.id) {
+//               handleGetDetailsUser(decoded?.id, result?.access_token)
+//             }
+//           handleNavigate()
+//         }else{
+//           alert("Email không tồn tại!!!")
+//         }
+//       }
+    
+
+//   } catch (error) {
+//     console.error('Lỗi trong quá trình đăng ký:', error);
+//   }
+// };
+
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -118,9 +153,19 @@ const SignUpPage = () => {
       // Gọi signupUserGoogle để gửi token đến backend
       const result = await signupUserGoogle({ token });
       console.log('Đăng ký thành công:', result.message);
-      if(result==="Đăng ký thành công"){
-        handleNavigateSignIn()
+      if(result.status === "OK"){
+        localStorage.setItem('access_token', JSON.stringify(result?.access_token))
+        localStorage.setItem('refresh_token', JSON.stringify(result?.refresh_token))
+        if (result?.access_token) {
+          const decoded = jwt_decode(result?.access_token)
+          if (decoded?.id) {
+            handleGetDetailsUser(decoded?.id, result?.access_token)
+          }
+        handleNavigate()
+      }else{
+        alert("Email không tồn tại!!!")
       }
+    }
       
 
       
