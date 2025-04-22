@@ -340,7 +340,7 @@ const PaymentPage = () => {
           orderId: orderId,
           userId: user?.id,
           orderInfo: `Thanh toán đơn hàng ${orderId}`,
-          returnUrl: "http://localhost:5000/payment-result"
+          returnUrl: `${process.env.REACT_APP_API_URL}/payment-result`
         })
         if (paymentRes?.data?.status === "success" && paymentRes.data?.paymentUrl) {
           window.location.href = paymentRes.data.paymentUrl;
