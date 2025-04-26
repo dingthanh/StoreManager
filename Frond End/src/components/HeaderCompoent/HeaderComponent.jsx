@@ -123,7 +123,7 @@ const handleKeyDown = (e) => {
     <div style={{  heiht: '100%', width: '100%', display: 'flex',background: '#739072', justifyContent: 'center' }}>
       <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset' , background: '#739072'}}>
         <Col span={5}>
-          <WrapperTextHeader to='/'> thanh</WrapperTextHeader>
+          <WrapperTextHeader to='/'>Cửa Hàng Bán Sách</WrapperTextHeader>
         </Col>
         {!isHiddenSearch && (
           <Col span={13}>

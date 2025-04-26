@@ -340,7 +340,7 @@ const PaymentPage = () => {
           orderId: orderId,
           userId: user?.id,
           orderInfo: `Thanh toán đơn hàng ${orderId}`,
-          returnUrl: "https://khoaluantotnghiep-be.onrender.com/payment-result"
+          returnUrl: "http://localhost:5000/payment-result"
         })
         if (paymentRes?.data?.status === "success" && paymentRes.data?.paymentUrl) {
           window.location.href = paymentRes.data.paymentUrl;

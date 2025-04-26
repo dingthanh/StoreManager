@@ -23,7 +23,7 @@ export const createOrder = async (data, access_token) => {
         token: `Bearer ${access_token}`,
       }
     })
-    alert("thanh congi")
+    // alert("thanh congi")
     return res.data; // Trả về dữ liệu nếu request thành công
   } catch (error) {
     console.log("❌Error creating order:", error);

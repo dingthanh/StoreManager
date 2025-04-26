@@ -176,7 +176,7 @@ const SignUpPage = () => {
     }
   };
     const handleOnError = () =>{
-      alert("dang nhap that bai3 ")
+      alert("dang nhap that bai")
       
     }
 

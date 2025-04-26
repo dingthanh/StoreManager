@@ -23,7 +23,7 @@ export default function FooterComponent() {
     <MDBFooter bgColor='light' className='text-center text-lg-start text-muted' style={{ fontSize: '15px'}}>
       <section className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom' style={{ color: '#fff', background:  '#739072', borderBottom: '5px solid black'}} >
         <div className='me-5 d-none d-lg-block'>
-          <span style={{ paddingLeft: '95px'}} >KHOÁ LUẬN</span>
+          <span style={{ paddingLeft: '95px'}} >Cửa Hàng Bán Sách</span>
         </div>
 
         <div style={{ paddingRight: '95px'}} >
@@ -54,7 +54,7 @@ export default function FooterComponent() {
             <MDBCol md='3' lg='4' xl='3' className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4'>
                 <MDBIcon color='secondary' icon='gem' className='me-3' />
-                NHÀ SÁCH DO T LÀM 
+                Cửa Hàng Bán Sách
               </h6>
               <p>
                 Chào mừng đên với chuỗi cửa hàng online sách 
@@ -133,13 +133,15 @@ export default function FooterComponent() {
               </p>
               <p>
                 <MDBIcon color='secondary' icon='envelope' className='me-3' />
-                
+                trandinhthanh24112003@gmail.com
               </p>
               <p>
                 <MDBIcon color='secondary' icon='phone' className='me-3' />
+                0354615979
               </p>
               <p>
                 <MDBIcon color='secondary' icon='print' className='me-3' />
+                0354615979
               </p>
             </MDBCol>
           </MDBRow>
@@ -149,7 +151,7 @@ export default function FooterComponent() {
       <div className='text-center p-4' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
         
         <a className='text-reset fw-bold' href='http://localhost:5000/'>
-          TRẦN ĐÌNH THÀNH
+        Cửa Hàng Bán Sách 
         </a>
       </div>
     </MDBFooter>

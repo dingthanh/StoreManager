@@ -36,7 +36,7 @@ export const signupUserGoogle = async (data) => {
     try {
         // Gửi token đến backend
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up-gg`, data);
-        alert("dang nhap that bai1 ")
+        // alert("dang nhap that bai1 ")
         console.log("response.data",response.data);
         return response.data
       } catch (error) {
